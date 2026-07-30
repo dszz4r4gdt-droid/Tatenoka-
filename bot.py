@@ -8,7 +8,8 @@ intents = discord.Intents.all()
 
 bot = commands.Bot(
     command_prefix="!",
-    intents=intents
+    intents=intents,
+    help_command=None
 )
 
 
@@ -18,169 +19,209 @@ async def on_ready():
     print("Commands:", [cmd.name for cmd in bot.commands])
 
 
-# TEST
+# =====================
+# COMMANDES GENERALES
+# =====================
+
 @bot.command()
 async def ping(ctx):
-    await ctx.send("Pong !")
+    await ctx.send("🏓 Pong !")
 
 
-# AIDE
 @bot.command()
-async def help(ctx):
+async def commands_list(ctx):
     embed = discord.Embed(
-        title="Commandes du bot",
+        title="📚 Commandes du bot",
         description="""
-**Modération**
-!kick @user raison
-!ban @user raison
-!unban ID
-!clear nombre
-!mute @user
-!unmute @user
-!warn @user raison
+**🛡️ Modération**
+`!kick @user raison`
+`!ban @user raison`
+`!unban ID`
+`!clear nombre`
+`!mute @user`
+`!unmute @user`
+`!warn @user raison`
 
-**Utilitaires**
-!ping
-!userinfo @user
-!avatar @user
-!serverinfo
+**⚙️ Utilitaires**
+`!ping`
+`!userinfo`
+`!avatar`
+`!serverinfo`
 
-**Serveur**
-!reglement
+**📜 Serveur**
+`!reglement`
+
+**ℹ️ Informations**
+`!commands`
         """,
         color=discord.Color.blue()
     )
+
     await ctx.send(embed=embed)
 
 
-# KICK
+# =====================
+# MODERATION
+# =====================
+
 @bot.command()
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, member: discord.Member, *, reason="Aucune raison"):
     await member.kick(reason=reason)
-    await ctx.send(f"✅ {member} a été expulsé. Raison : {reason}")
+    await ctx.send(f"👢 {member} a été expulsé.\nRaison : {reason}")
 
 
-# BAN
 @bot.command()
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, member: discord.Member, *, reason="Aucune raison"):
     await member.ban(reason=reason)
-    await ctx.send(f"🔨 {member} a été banni. Raison : {reason}")
+    await ctx.send(f"🔨 {member} a été banni.\nRaison : {reason}")
 
 
-# UNBAN
 @bot.command()
 @commands.has_permissions(ban_members=True)
 async def unban(ctx, user_id: int):
+
     user = await bot.fetch_user(user_id)
+
     await ctx.guild.unban(user)
+
     await ctx.send(f"✅ {user} a été débanni.")
 
 
-# CLEAR
 @bot.command()
 @commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount: int):
+
     await ctx.channel.purge(limit=amount + 1)
-    await ctx.send(f"🧹 {amount} messages supprimés.")
+
+    msg = await ctx.send(f"🧹 {amount} messages supprimés.")
+
+    await msg.delete(delay=5)
 
 
-# MUTE
 @bot.command()
 @commands.has_permissions(manage_roles=True)
 async def mute(ctx, member: discord.Member):
-    role = discord.utils.get(ctx.guild.roles, name="Muted")
+
+    role = discord.utils.get(
+        ctx.guild.roles,
+        name="Muted"
+    )
 
     if role is None:
-        role = await ctx.guild.create_role(name="Muted")
+        role = await ctx.guild.create_role(
+            name="Muted"
+        )
 
     await member.add_roles(role)
-    await ctx.send(f"🔇 {member} est mute.")
+
+    await ctx.send(f"🔇 {member} a été mute.")
 
 
-# UNMUTE
 @bot.command()
 @commands.has_permissions(manage_roles=True)
 async def unmute(ctx, member: discord.Member):
-    role = discord.utils.get(ctx.guild.roles, name="Muted")
+
+    role = discord.utils.get(
+        ctx.guild.roles,
+        name="Muted"
+    )
 
     if role:
         await member.remove_roles(role)
 
-    await ctx.send(f"🔊 {member} est unmute.")
+    await ctx.send(f"🔊 {member} a été unmute.")
 
 
-# WARN
 @bot.command()
 @commands.has_permissions(manage_messages=True)
 async def warn(ctx, member: discord.Member, *, reason="Aucune raison"):
+
     await ctx.send(
-        f"⚠️ {member.mention} a reçu un avertissement.\nRaison : {reason}"
+        f"⚠️ {member.mention} a reçu un avertissement.\n"
+        f"Raison : {reason}"
     )
 
 
+# =====================
 # REGLEMENT
+# =====================
+
 @bot.command()
 async def reglement(ctx):
 
     embed = discord.Embed(
         title="📜 Règlement du serveur",
         description="""
-**1. Respect**
-Respectez tous les membres.
+**1 | Respect**
+Respect obligatoire envers tous les membres.
 
-**2. Aucun spam**
+**2 | Spam**
 Le spam, flood et ping abusif sont interdits.
 
-**3. Aucun contenu interdit**
-Pas d'insultes graves, haine ou contenu dangereux.
+**3 | Contenu interdit**
+Aucun contenu haineux, dangereux ou illégal.
 
-**4. Utilisation des salons**
+**4 | Salons**
 Utilisez chaque salon correctement.
 
-**5. Équipe du serveur**
+**5 | Staff**
 Les décisions du staff doivent être respectées.
+
+**6 | Sanctions**
+Le non-respect du règlement peut entraîner une sanction.
         """,
         color=discord.Color.gold()
     )
 
-    embed.set_footer(text="Merci de respecter le règlement.")
+    embed.set_footer(
+        text="Merci de respecter le règlement."
+    )
 
     await ctx.send(embed=embed)
 
 
-# USER INFO
+# =====================
+# INFORMATIONS
+# =====================
+
 @bot.command()
 async def userinfo(ctx, member: discord.Member = None):
+
     member = member or ctx.author
 
     embed = discord.Embed(
-        title=f"Informations de {member}",
+        title=f"👤 {member}",
         color=discord.Color.green()
     )
 
-    embed.add_field(name="ID", value=member.id)
-    embed.add_field(name="Compte créé", value=member.created_at)
+    embed.add_field(
+        name="ID",
+        value=member.id
+    )
 
-    embed.set_thumbnail(url=member.avatar.url)
+    embed.add_field(
+        name="Compte créé",
+        value=member.created_at.strftime("%d/%m/%Y")
+    )
 
     await ctx.send(embed=embed)
 
 
-# AVATAR
 @bot.command()
 async def avatar(ctx, member: discord.Member = None):
+
     member = member or ctx.author
+
     await ctx.send(member.avatar.url)
 
 
-# SERVER INFO
 @bot.command()
 async def serverinfo(ctx):
 
     embed = discord.Embed(
-        title=ctx.guild.name,
+        title=f"🏰 {ctx.guild.name}",
         color=discord.Color.purple()
     )
 
@@ -190,8 +231,8 @@ async def serverinfo(ctx):
     )
 
     embed.add_field(
-        name="Créé le",
-        value=ctx.guild.created_at
+        name="Serveur créé",
+        value=ctx.guild.created_at.strftime("%d/%m/%Y")
     )
 
     await ctx.send(embed=embed)
