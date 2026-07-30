@@ -15,4 +15,8 @@ bot = commands.Bot(
 async def on_ready():
     print(f"{bot.user} is online!")
 
+@bot.command()
+async def ping(ctx):
+    await ctx.send("Pong!")
+
 bot.run(TOKEN)
