@@ -1,1 +1,6 @@
-
+discord.py
+python-dotenv
+motor
+aiohttp
+chat-exporter
+humanfriendly
