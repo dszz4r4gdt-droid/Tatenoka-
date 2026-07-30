@@ -20,7 +20,7 @@ async def on_ready():
 
 
 # =====================
-# COMMANDES GENERALES
+# COMMANDES
 # =====================
 
 @bot.command()
@@ -28,10 +28,10 @@ async def ping(ctx):
     await ctx.send("🏓 Pong !")
 
 
-@bot.command()
+@bot.command(name="commands")
 async def commands_list(ctx):
     embed = discord.Embed(
-        title="📚 Commandes du bot",
+        title="⬛🟥 𝐆𝐀𝐊𝐔𝐑𝐀𝐍 | Commandes 🟥⬛",
         description="""
 **🛡️ Modération**
 `!kick @user raison`
@@ -42,19 +42,16 @@ async def commands_list(ctx):
 `!unmute @user`
 `!warn @user raison`
 
-**⚙️ Utilitaires**
+**⚔️ Utilitaires**
 `!ping`
 `!userinfo`
 `!avatar`
 `!serverinfo`
 
-**📜 Serveur**
+**📜 Clan**
 `!reglement`
-
-**ℹ️ Informations**
-`!commands`
         """,
-        color=discord.Color.blue()
+        color=discord.Color.dark_red()
     )
 
     await ctx.send(embed=embed)
@@ -68,35 +65,29 @@ async def commands_list(ctx):
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, member: discord.Member, *, reason="Aucune raison"):
     await member.kick(reason=reason)
-    await ctx.send(f"👢 {member} a été expulsé.\nRaison : {reason}")
+    await ctx.send(f"🟥 {member} a été expulsé.\nRaison : {reason}")
 
 
 @bot.command()
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, member: discord.Member, *, reason="Aucune raison"):
     await member.ban(reason=reason)
-    await ctx.send(f"🔨 {member} a été banni.\nRaison : {reason}")
+    await ctx.send(f"🟥 {member} a été banni.\nRaison : {reason}")
 
 
 @bot.command()
 @commands.has_permissions(ban_members=True)
 async def unban(ctx, user_id: int):
-
     user = await bot.fetch_user(user_id)
-
     await ctx.guild.unban(user)
-
-    await ctx.send(f"✅ {user} a été débanni.")
+    await ctx.send(f"⬜ {user} a été débanni.")
 
 
 @bot.command()
 @commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount: int):
-
     await ctx.channel.purge(limit=amount + 1)
-
     msg = await ctx.send(f"🧹 {amount} messages supprimés.")
-
     await msg.delete(delay=5)
 
 
@@ -116,7 +107,7 @@ async def mute(ctx, member: discord.Member):
 
     await member.add_roles(role)
 
-    await ctx.send(f"🔇 {member} a été mute.")
+    await ctx.send(f"🔇 {member} est mute.")
 
 
 @bot.command()
@@ -131,7 +122,7 @@ async def unmute(ctx, member: discord.Member):
     if role:
         await member.remove_roles(role)
 
-    await ctx.send(f"🔊 {member} a été unmute.")
+    await ctx.send(f"🔊 {member} est unmute.")
 
 
 @bot.command()
@@ -145,46 +136,117 @@ async def warn(ctx, member: discord.Member, *, reason="Aucune raison"):
 
 
 # =====================
-# REGLEMENT
+# REGLEMENT GAKURAN
 # =====================
 
 @bot.command()
 async def reglement(ctx):
 
     embed = discord.Embed(
-        title="📜 Règlement du serveur",
+        title="⬛🟥 𝐆𝐀𝐊𝐔𝐑𝐀𝐍 🟥⬛\n「 𝐂𝐎𝐃𝐄 𝐃𝐔 𝐂𝐋𝐀𝐍 」",
         description="""
-**1 | Respect**
-Respect obligatoire envers tous les membres.
 
-**2 | Spam**
-Le spam, flood et ping abusif sont interdits.
+━━━━━━━━━━━━━━━━━━━━━━
 
-**3 | Contenu interdit**
-Aucun contenu haineux, dangereux ou illégal.
+🟥 **𝐈𝐃𝐄𝐍𝐓𝐈𝐓𝐄́ 𝐃𝐔 𝐂𝐋𝐀𝐍**
 
-**4 | Salons**
-Utilisez chaque salon correctement.
+Rejoindre Gakuran signifie porter son nom, son symbole et son héritage.
 
-**5 | Staff**
-Les décisions du staff doivent être respectées.
+Chaque membre représente le clan à travers son comportement, ses actes et sa réputation.
 
-**6 | Sanctions**
-Le non-respect du règlement peut entraîner une sanction.
+**Loyauté • Discipline • Respect**
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+⬜ **𝐂𝐎𝐌𝐏𝐎𝐑𝐓𝐄𝐌𝐄𝐍𝐓**
+
+Chaque membre doit :
+
+⚪ Respecter les membres.
+⚪ Respecter la hiérarchie.
+⚪ Protéger l'image du clan.
+⚪ Participer aux activités.
+
+Interdit :
+
+🔴 Toxicité.
+🔴 Provocations inutiles.
+🔴 Actions nuisant au clan.
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+🟥 **𝐇𝐈𝐄́𝐑𝐀𝐑𝐂𝐇𝐈𝐄**
+
+La hiérarchie maintient l'ordre.
+
+Les membres doivent :
+
+⬛ Respecter les responsables.
+⬛ Suivre les directives.
+⬛ Accepter les décisions.
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+⚔️ **𝐑𝐏 𝐃𝐔 𝐂𝐋𝐀𝐍**
+
+Lors des activités RP :
+
+⚪ Fair-play obligatoire.
+⚪ Respect de l'immersion.
+⚪ Aucun metagaming.
+⚪ Aucun powergaming.
+
+La qualité du RP passe avant la victoire.
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+⬛ **𝐇𝐑𝐏**
+
+Les membres doivent :
+
+⚪ Rester respectueux.
+⚪ Régler les conflits calmement.
+⚪ Garder les informations internes.
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+⚖️ **𝐒𝐀𝐍𝐂𝐓𝐈𝐎𝐍𝐒**
+
+⬜ Avertissement
+
+🟥 Suspension
+
+⬛ Retrait de grade
+
+🟥 Expulsion
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+🩸 « Porter Gakuran est un privilège. »
+
+⬛🟥 𝐇𝐎𝐍𝐍𝐄𝐔𝐑 • 𝐃𝐈𝐒𝐂𝐈𝐏𝐋𝐈𝐍𝐄 • 𝐔𝐍𝐈𝐓𝐄́ 🟥⬛
+
         """,
-        color=discord.Color.gold()
+        color=discord.Color.dark_red()
     )
 
     embed.set_footer(
-        text="Merci de respecter le règlement."
+        text="Gakuran | Code du Clan"
     )
 
     await ctx.send(embed=embed)
 
 
 # =====================
-# INFORMATIONS
+# INFOS
 # =====================
+
+@bot.command()
+async def avatar(ctx, member: discord.Member = None):
+
+    member = member or ctx.author
+    await ctx.send(member.avatar.url)
+
 
 @bot.command()
 async def userinfo(ctx, member: discord.Member = None):
@@ -193,7 +255,7 @@ async def userinfo(ctx, member: discord.Member = None):
 
     embed = discord.Embed(
         title=f"👤 {member}",
-        color=discord.Color.green()
+        color=discord.Color.dark_red()
     )
 
     embed.add_field(
@@ -201,38 +263,20 @@ async def userinfo(ctx, member: discord.Member = None):
         value=member.id
     )
 
-    embed.add_field(
-        name="Compte créé",
-        value=member.created_at.strftime("%d/%m/%Y")
-    )
-
     await ctx.send(embed=embed)
-
-
-@bot.command()
-async def avatar(ctx, member: discord.Member = None):
-
-    member = member or ctx.author
-
-    await ctx.send(member.avatar.url)
 
 
 @bot.command()
 async def serverinfo(ctx):
 
     embed = discord.Embed(
-        title=f"🏰 {ctx.guild.name}",
-        color=discord.Color.purple()
+        title=f"⬛ {ctx.guild.name}",
+        color=discord.Color.dark_red()
     )
 
     embed.add_field(
         name="Membres",
         value=ctx.guild.member_count
-    )
-
-    embed.add_field(
-        name="Serveur créé",
-        value=ctx.guild.created_at.strftime("%d/%m/%Y")
     )
 
     await ctx.send(embed=embed)
