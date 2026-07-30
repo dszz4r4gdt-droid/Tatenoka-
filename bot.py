@@ -16,7 +16,7 @@ async def on_ready():
     print(f"{bot.user} is online!")
 
 @bot.command()
-async def ping(ctx):
-    await ctx.send("Pong!")
+async def testbot(ctx):
+    await ctx.send("Mon bot fonctionne !")
 
 bot.run(TOKEN)
