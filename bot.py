@@ -18,12 +18,12 @@ bot = commands.Bot(
 @bot.event
 async def on_ready():
     print(f"{bot.user} is online!")
-    print("Commands:", [cmd.name for cmd in bot.commands])
+    print("Bot prêt.")
 
 
-# =====================
+# ==========================
 # BOUTONS CANDIDATURE
-# =====================
+# ==========================
 
 class ApplicationButtons(discord.ui.View):
 
@@ -43,9 +43,9 @@ class ApplicationButtons(discord.ui.View):
     ):
 
         await self.applicant.send(
-            "⬛🟥 **TATENOKAI — CANDIDATURE ACCEPTÉE** 🟥⬛\n\n"
+            "⬛🟥 **𝐓𝐀𝐓𝐄𝐍𝐎𝐊𝐀𝐈 — 𝐀𝐂𝐂𝐄𝐏𝐓𝐀𝐓𝐈𝐎𝐍** 🟥⬛\n\n"
             "Votre candidature RP a été acceptée.\n"
-            "Bienvenue au sein de Tatenokai."
+            "Bienvenue au sein du clan Tatenokai."
         )
 
         await interaction.response.send_message(
@@ -65,7 +65,7 @@ class ApplicationButtons(discord.ui.View):
     ):
 
         await self.applicant.send(
-            "⬛🟥 **TATENOKAI — CANDIDATURE REFUSÉE** 🟥⬛\n\n"
+            "⬛🟥 **𝐓𝐀𝐓𝐄𝐍𝐎𝐊𝐀𝐈 — 𝐑𝐄𝐅𝐔𝐒** 🟥⬛\n\n"
             "Votre candidature RP n'a pas été retenue."
         )
 
@@ -75,9 +75,9 @@ class ApplicationButtons(discord.ui.View):
         )
 
 
-# =====================
+# ==========================
 # COMMANDES GENERALES
-# =====================
+# ==========================
 
 @bot.command()
 async def ping(ctx):
@@ -88,9 +88,10 @@ async def ping(ctx):
 async def commands_list(ctx):
 
     embed = discord.Embed(
-        title="⬛🟥 𝐓𝐀𝐓𝐄𝐍𝐎𝐊𝐀𝐈 — COMMANDES 🟥⬛",
+        title="⬛🟥 𝐓𝐀𝐓𝐄𝐍𝐎𝐊𝐀𝐈 — 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐄𝐒 🟥⬛",
         description="""
-**🛡️ MODÉRATION**
+
+🛡️ **MODÉRATION**
 
 `!kick @user raison`
 `!ban @user raison`
@@ -100,17 +101,18 @@ async def commands_list(ctx):
 `!unmute @user`
 `!warn @user raison`
 
-**⚔️ UTILITAIRES**
+⚔️ **UTILITAIRES**
 
 `!ping`
 `!avatar`
 `!userinfo`
 `!serverinfo`
 
-**🏯 CLAN**
+🏯 **CLAN**
 
 `!reglement`
 `!apply`
+
         """,
         color=discord.Color.dark_red()
     )
@@ -118,9 +120,10 @@ async def commands_list(ctx):
     await ctx.send(embed=embed)
 
 
-# =====================
+
+# ==========================
 # MODERATION
-# =====================
+# ==========================
 
 @bot.command()
 @commands.has_permissions(kick_members=True)
@@ -129,7 +132,7 @@ async def kick(ctx, member: discord.Member, *, reason="Aucune raison"):
     await member.kick(reason=reason)
 
     await ctx.send(
-        f"🟥 {member} a été expulsé.\nRaison : {reason}"
+        f"👢 {member} a été expulsé.\nRaison : {reason}"
     )
 
 
@@ -140,13 +143,13 @@ async def ban(ctx, member: discord.Member, *, reason="Aucune raison"):
     await member.ban(reason=reason)
 
     await ctx.send(
-        f"🟥 {member} a été banni.\nRaison : {reason}"
+        f"🔨 {member} a été banni.\nRaison : {reason}"
     )
 
 
 @bot.command()
 @commands.has_permissions(ban_members=True)
-async def unban(ctx, user_id:int):
+async def unban(ctx, user_id: int):
 
     user = await bot.fetch_user(user_id)
 
@@ -159,9 +162,9 @@ async def unban(ctx, user_id:int):
 
 @bot.command()
 @commands.has_permissions(manage_messages=True)
-async def clear(ctx, amount:int):
+async def clear(ctx, amount: int):
 
-    await ctx.channel.purge(limit=amount+1)
+    await ctx.channel.purge(limit=amount + 1)
 
     msg = await ctx.send(
         f"🧹 {amount} messages supprimés."
@@ -170,14 +173,20 @@ async def clear(ctx, amount:int):
     await msg.delete(delay=5)
 
 
+
 @bot.command()
 @commands.has_permissions(manage_messages=True)
-async def warn(ctx, member:discord.Member, *, reason="Aucune raison"):
+async def warn(ctx, member: discord.Member, *, reason="Aucune raison"):
 
     await ctx.send(
         f"⚠️ {member.mention} a reçu un avertissement.\n"
         f"Raison : {reason}"
-        @bot.command()
+    )
+    # ==========================
+# MUTE / UNMUTE
+# ==========================
+
+@bot.command()
 @commands.has_permissions(manage_roles=True)
 async def mute(ctx, member: discord.Member):
 
@@ -215,9 +224,9 @@ async def unmute(ctx, member: discord.Member):
     )
 
 
-# =====================
+# ==========================
 # REGLEMENT TATENOKAI
-# =====================
+# ==========================
 
 @bot.command()
 async def reglement(ctx):
@@ -233,8 +242,8 @@ async def reglement(ctx):
 Rejoindre Tatenokai signifie porter son nom,
 son symbole et son héritage.
 
-Chaque membre représente le clan par ses actes,
-son comportement et sa réputation.
+Chaque membre représente le clan à travers
+ses actes, son comportement et son honneur.
 
 **HONNEUR • DISCIPLINE • UNITÉ**
 
@@ -261,10 +270,10 @@ Interdit :
 
 Lors des activités RP :
 
-⬛ Respect de l'immersion.
-⬛ Fair-play obligatoire.
-⬛ Aucun metagaming.
-⬛ Aucun powergaming.
+⬛ Respecter l'immersion.
+⬛ Jouer avec fair-play.
+⬛ Ne pas utiliser de metagaming.
+⬛ Ne pas utiliser de powergaming.
 
 La qualité du RP passe avant la victoire.
 
@@ -274,8 +283,8 @@ La qualité du RP passe avant la victoire.
 
 Les membres doivent :
 
-⚪ Régler les conflits calmement.
 ⚪ Respecter les autres joueurs.
+⚪ Régler les conflits calmement.
 ⚪ Protéger les informations internes.
 
 ━━━━━━━━━━━━━━━━━━━━━━
@@ -293,20 +302,18 @@ Les membres doivent :
 🩸 Porter Tatenokai est un privilège.
 
 ⬛🟥 𝐓𝐀𝐓𝐄𝐍𝐎𝐊𝐀𝐈 🟥⬛
+
         """,
         color=discord.Color.dark_red()
-    )
-
-    embed.set_footer(
-        text="Tatenokai | Code du Clan"
     )
 
     await ctx.send(embed=embed)
 
 
-# =====================
+
+# ==========================
 # CANDIDATURE RP
-# =====================
+# ==========================
 
 @bot.command()
 async def apply(ctx):
@@ -326,6 +333,7 @@ async def apply(ctx):
         "🟥 **5 | ORIGINE DU PERSONNAGE**\n\nQuelle est l’origine de votre personnage Gakuran ?\n(Pays, famille, clan ou milieu.)",
 
         "🟥 **6 | ART DU COMBAT**\n\nQuel est le style de combat de votre personnage Gakuran ?\n(Décrivez ses techniques et ses spécialités.)"
+
     ]
 
 
@@ -336,7 +344,7 @@ async def apply(ctx):
 
         await user.send(
             "⬛🟥 **𝐓𝐀𝐓𝐄𝐍𝐎𝐊𝐀𝐈 — 𝐃𝐎𝐒𝐒𝐈𝐄𝐑 𝐃’𝐀𝐃𝐌𝐈𝐒𝐒𝐈𝐎𝐍 𝐑𝐏** 🟥⬛\n\n"
-            "Répondez sérieusement à chaque question."
+            "Répondez aux questions sérieusement."
         )
 
 
@@ -367,9 +375,12 @@ async def apply(ctx):
 
         for i, answer in enumerate(answers):
 
+            if len(answer) > 1024:
+                answer = answer[:1020] + "..."
+
             embed.add_field(
                 name=f"Réponse {i+1}",
-                value=answer[:1024],
+                value=answer,
                 inline=False
             )
 
@@ -385,16 +396,19 @@ async def apply(ctx):
         )
 
 
-    except Exception:
+    except Exception as e:
+
+        print("ERREUR CANDIDATURE :", e)
 
         await user.send(
-            "❌ Votre candidature a expiré ou une erreur est survenue."
+            f"❌ Une erreur est survenue : {e}"
         )
 
 
-# =====================
+
+# ==========================
 # INFORMATIONS
-# =====================
+# ==========================
 
 @bot.command()
 async def avatar(ctx, member: discord.Member = None):
@@ -404,6 +418,7 @@ async def avatar(ctx, member: discord.Member = None):
     await ctx.send(
         member.avatar.url
     )
+
 
 
 @bot.command()
@@ -442,5 +457,6 @@ async def serverinfo(ctx):
 
 
 
+# ==========================
+
 bot.run(TOKEN)
-    )
